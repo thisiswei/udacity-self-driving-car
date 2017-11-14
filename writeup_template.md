@@ -23,13 +23,27 @@ The goals / steps of this project are the following:
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+My pipeline consisted of 5 steps.
+1. convert the images to grayscale
+2. blur the images using gaussian blur
+3. find the edges using canny
+4. mask out the edges, and finally
+5. convert the image to hough space and connect the lines
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function:
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+1. separates lines into two groups -- left land lines and right lane lines -- left lane lines's slope are >0 and right lane lines <0
 
-![alt text][image1]
+2. for each group: calculate the average point and the average slope 
+
+3. for each group: extrapolate the lines by combinations of the following:
+   - find the top point (TP) and the bottom point (BP), and
+   - connect TP and BP
+   - the TP and BP are calculated using:
+     - m*x + b = y, and
+     - TP's y is 310 (the y of the mask defined in piple step 4), and combine with the fomular above we get TP's x
+     - using same logic we get BP
+
 
 
 ### 2. Identify potential shortcomings with your current pipeline
@@ -37,11 +51,12 @@ If you'd like to include images to show how the pipeline works, here is how to i
 
 One potential shortcoming would be what would happen when ... 
 
-Another shortcoming could be ...
+the slopes are the same for the both lanes, (e.g., left turn or right turn) and my solution will probably draw only one line
+
 
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
+A possible improvement would be group the lines by their relatives positions and left lane lines will always be separated from the right lane lines
 
-Another potential improvement could be to ...
+
